@@ -1,0 +1,105 @@
+Beautiful Soup: is a Python library for pulling data out of HTML and XML files
+
+Installation:
+sudo apt-get install bs4
+
+Making Soup:
+
+	from bs4 import BeautifulSoup
+
+	soup = BeautifulSoup(open("index.html"))
+
+	soup = BeautifulSoup("<html>data</html>")
+
+Kinds of Objects:
+1. Tags
+2. Navigable Strings
+3. BeautifulSoup
+4. Comment
+
+1. Tags
+	soup = BeautifulSoup('<b class="boldest">Extremely bold</b>')
+	tag = soup.b
+	type(tag)
+	# <class 'bs4.element.Tag'>
+	Tags have many attributes and methods
+		a. Name
+		Every tag has a name, accessible as .name:
+			tag.name
+			# u'b'
+		b. Attributes
+			tag['class']
+			# u'boldest'
+		You can access that dictionary directly as .attrs:
+			tag.attrs
+			# {u'class': u'boldest'}
+
+2. Navigable Strings
+	A string corresponds to a bit of text within a tag.
+		tag.string
+		# u'Extremely bold'
+		type(tag.string)
+		# <class 'bs4.element.NavigableString'>
+	You can’t edit a string in place, but you can replace one string with another, using replace_with():
+		tag.string.replace_with("No longer bold")
+		tag
+		# <blockquote>No longer bold</blockquote>
+
+3. BeautifulSoup
+	The BeautifulSoup object itself represents the document as a whole.
+		soup.name
+		# u'[document]'
+4. Comments and other special strings
+		markup = "<b><!--Hey, buddy. Want to buy a used parser?--></b>"
+		soup = BeautifulSoup(markup)
+		comment = soup.b.string
+		type(comment)
+		# <class 'bs4.element.Comment'>
+	
+Navigating the Tree
+
+1. .contents and .children
+	A tag’s children are available in a list called .contents
+
+	Instead of getting them as a list, you can iterate over a tag’s children using the .children generator
+		for child in title_tag.children:
+		print(child)
+		# The Dormouse's story
+
+	The .contents and .children attributes only consider a tag’s direct children
+
+2. .descendants
+	The .descendants attribute lets you iterate over all of a tag’s children, recursively: its direct children, the children of its direct 		children, and so on
+		for child in head_tag.descendants:
+			print(child)
+		# <title>The Dormouse's story</title>
+		# The Dormouse's story
+	difference:		
+		len(list(soup.children))
+		# 1
+		len(list(soup.descendants))
+		# 25
+
+3. .strings and stripped_strings
+	If there’s more than one thing inside a tag, you can still look at just the strings. Use the .strings generator:
+		for string in soup.strings:
+			print(repr(string))
+		# u"The Dormouse's story"
+		# u'\n\n'
+		# u"The Dormouse's story"
+		# u'\n\n'
+		# u'Once upon a time there were three little sisters; and their names were\n'
+		# u'Elsie'
+		# u',\n'
+		# u'Lacie'
+		# u' and\n'
+		# u'Tillie'
+		# u';\nand they lived at the bottom of a well.'
+		# u'\n\n'
+		# u'...'
+		# u'\n'
+	To remove white spaces: all '\n' etc. 
+		for string in soup.stripped_strings:
+		    print(repr(string))
+
+	

@@ -1,0 +1,56 @@
+urllib2 library to fetch internet resource by providing url
+
+	import urllib2
+	response = urllib2.urlopen("http://google.com")
+	pageData = response.read()
+
+Respones comes in file like object and thus file functions can be applied
+
+When Request for HTTP i.e. Request Response based protocol with a Request object,
+
+	''' urllib2.Request(url) ----- to create a request object for given url '''
+
+	import urllib2
+	req = urllib2.Request('http://www.voidspace.org.uk')
+	response = urllib2.urlopen(req)
+	the_page = response.read()
+
+Data can be sent after encoding it to a allowed format with a valid Request object for methods like POST
+The encoding is done using a function from the urllib library not from urllib2.
+
+	''' urllib.urlencode(data) ----- to encode data  '''
+
+	import urllib
+	import urllib2
+
+	url = 'http://www.someserver.com/cgi-bin/register.cgi'
+	values = {'name' : 'Michael Foord',
+	          'location' : 'Northampton',
+	          'language' : 'Python' }
+
+	data = urllib.urlencode(values)
+	req = urllib2.Request(url, data)
+	response = urllib2.urlopen(req)
+	the_page = response.read()
+	
+If data argument is not passed, urllib2 uses GET method by default
+
+Exception handelling:
+2 major exceptions:
+	a. URL error: error in the url or while urlopen() like no connection
+	b. HTTP error: error from server, several status codes server sends in case of error like 404, 500 etc.
+	###### to handle both error simultaneously ########
+		from urllib2 import Request, urlopen, URLError
+		req = Request(someurl)
+		try:
+		    response = urlopen(req)
+		except URLError as e:
+		    if hasattr(e, 'reason'):   --------- url error has reason
+		        print 'We failed to reach a server.'
+		        print 'Reason: ', e.reason
+		    elif hasattr(e, 'code'):   ------------ http error has error code
+		        print 'The server couldn\'t fulfill the request.'
+		        print 'Error code: ', e.code
+		else:
+		    # everything is fine
+
