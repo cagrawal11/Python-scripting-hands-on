@@ -6,7 +6,7 @@
 
 	Input will be a valid url
 
-	Input url is hard-code now
+	Input url is hard-code for now
 '''
 
 import requests
@@ -17,21 +17,14 @@ url = 'http://www.voidspace.org.uk'
 
 response = requests.get(url)
 soup = BeautifulSoup(response.content)
-#print soup.prettify()
-
-print '\n\n'
 
 titleTag = soup.title
 titleTag.string = "hackedbychetan"
-
-#reg = re.compile('h[1-6]')
 
 for tag in soup.find_all(re.compile('h[1-6]|a', re.IGNORECASE)):
 	if tag.name == re.compile('h[1-6]'):
 		tag.string = "hackedbychetan"
 	else:
 		tag['href'] = 'http://hackedbyxyz.com'
-
-print '\n\n'
 
 print soup.prettify()
