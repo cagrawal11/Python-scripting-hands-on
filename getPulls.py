@@ -28,6 +28,7 @@ input_string = input_string.split(' ')
 org = input_string[0]   #get organization name
 repo = input_string[1]   #get the repo name
 date = input_string[2]    #get date
+#entered date is not validated. Need to add validations to test if the date entered is valid
 date = '-'.join(date.split('-' )[::-1])
 url = Base_url + '/' + org +'/' + repo + '/' + 'pulls'
 response = requests.get(url).json()
