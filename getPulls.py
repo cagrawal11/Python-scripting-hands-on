@@ -29,17 +29,12 @@ org = input_string[0]   #get organization name
 repo = input_string[1]   #get the repo name
 date = input_string[2]    #get date
 date = '-'.join(date.split('-' )[::-1])
-
 url = Base_url + '/' + org +'/' + repo + '/' + 'pulls'
-print url
 response = requests.get(url).json()
-
-'''Pathetic way to chk if repo exist. REDO how handle this case'''
-if 'Not Found' in response['message']:
+# if the url is incorrect, github api responses with a error message dict else a list of request details
+if isinstance(response, dict):
 	print "no such repo"
 else:
 	for pullRequests in response:
 		if (date in pullRequests['created_at']):
 			print pullRequests['url']
-#except requests.exceptions.RequestException	 as e:
-#	print e
