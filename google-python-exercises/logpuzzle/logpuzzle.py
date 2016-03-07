@@ -24,6 +24,21 @@ def read_urls(filename):
   extracting the hostname from the filename itself.
   Screens out duplicate urls and returns the urls sorted into
   increasing order."""
+  domain_name_pos = filename.index('_')
+  domain_name = filename[domain_name_pos+1:]
+
+  f = open(filename,'r')
+  #print f
+  url_dict = {}
+  for line in f:
+  	#print line
+	match = re.search(r'"GET (\S+)', line)
+	url = 'http://'+domain_name+match.group(1)
+	if 'puzzle' in url:
+		url_dict[url] = 1
+  for link in sorted(url_dict):
+  	print link
+  return sorted(url_dict)
   # +++your code here+++
   
 
@@ -36,7 +51,15 @@ def download_images(img_urls, dest_dir):
   Creates the directory if necessary.
   """
   # +++your code here+++
-  
+  if not os.path.exists(dest_dir):
+  	os.makedirs(dest_dir)
+  index = open(os.path.join(dest_dir, 'index.html'),'w')
+  i = 0
+  for link in img_urls:
+  	name = 'img%d' %i
+  	print 'Retriveing....'+link
+  	urllib.urlretrieve(link, os.path.join(dest_dir, name))
+  	i += 1
 
 def main():
   args = sys.argv[1:]

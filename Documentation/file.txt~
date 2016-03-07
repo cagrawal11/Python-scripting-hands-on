@@ -1,0 +1,26 @@
+open file:
+
+f = open('filename', 'r')
+ -- filename: full path of the file. can be stored in string and pass as arg to open()
+ -- 'r': mode to open file. 'r' is just read, 'w' for write it truncates file everytime the same file is opened.
+
+f is now file object sort of handler. may ops can now be performed using this handler.
+1. read file
+	f.read()
+	this will read the whole file.
+	
+	To iterate throught the file, line-by-line or word-by-word
+		a. while not eof:
+			do_something
+	
+	To loop over line by line:
+		with open('filename') as openfileobject: #f
+    		for line in openfileobject: #f
+       			 do_something()
+		File objects are iterable and yield lines until EOF. Using the file object as an iterable uses a buffer to ensure performant reads.
+		The file will be automatically closed at the end of the above code (the with construct takes care of that).
+		
+		Finally, it is worth noting that line will preserve the trailing newline. This can be easily removed using:	
+			line = line.rstrip()
+	One more way:
+		line = f.readline()
